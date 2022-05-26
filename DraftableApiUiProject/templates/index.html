@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    {% load static %}
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <title>APTARA - COMPARE DOCS</title>
+    <script>
+      function show_processing() {
+        document.getElementById("submit_btn_load").style.display = "";
+        var x = document.getElementById("MsgBox");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm bg-light">
+      <a class="navbar-brand" href="#">
+        <img
+          src="{% static 'images/aptaracorp-logo.png' %}"
+          alt="Logo"
+          style="width: 120px"
+        />
+      </a>
+      <!-- Links -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="wrapper-index">
+      <h4 class="text-center text-info">Compare PDF Files</h4>
+      <hr />
+      <div
+        class="spinner-border justify-content-center text-center"
+        role="status"
+        id="submit_btn_load"
+        style="display: none"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+      {% if messages %} {% for message in messages %}
+      <div class="container p-1" id="MsgBox">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+            style="color: #710000"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {% if message.tags != "alert-danger" %}
+          <div
+            class="border-bottom border-info p-1 d-flex align-items-center justify-content-center"
+          style="font-size:smaller">
+            Click on this link to see comparision of files in viewer:
+            <a class="nav-link text-center" href="{{ url }}" target="_blank">
+              {{ url }}</a
+            >
+          </div>
+          {% else %} {{ message }} {% endif %}
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+      <form
+        class="p-3 mt-3"
+        action="{% url 'index' %}"
+        name="index_form"
+        method="post"
+        enctype="multipart/form-data"
+        id="index_form"
+        onsubmit="show_processing();"
+      >
+        {% csrf_token %}
+
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group files">
+                <label
+                  >1. Drop older version file here(PDF)</label
+                >
+                <input type="file" class="form-control" name="left_file" accept="application/pdf" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group files">
+                <label
+                  >2. Drop newer version file here(PDF)</label
+                >
+                <input type="file" class="form-control" name="right_file" accept="application/pdf" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn mt-3" id="submit_btn">
+          3. Compare
+        </button>
+      </form>
+      <div class="text-center fs-6">
+        <!-- <a href="#">Forget password?</a> or <a href="#">Sign up</a> -->
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
