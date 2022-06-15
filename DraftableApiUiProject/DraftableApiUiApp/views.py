@@ -3,6 +3,7 @@ from django.contrib import auth, messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 import draftable
+from django.contrib.auth.models import User
 import requests
 from draftable.endpoints import exceptions
 from datetime import timedelta
@@ -18,6 +19,8 @@ def index(request):
     if request.method == "POST" and request.FILES:
         left_file = request.FILES["left_file"]
         right_file = request.FILES["right_file"]
+        print("Profile:-", request.user.profile.token)
+        token = request.user.profile.token
         # user_files = UserFiles(left_file=left_file, right_file=right_file)
         # user_files.save()
         form = UploadFilesForm(request.POST, request.FILES)
@@ -33,7 +36,8 @@ def index(request):
                 reqUrl = "https://43.204.76.144/api/v1/comparisons"
 
                 headers = {
-                    'Authorization': 'Token fc0870520b1d705a1718f0462aca3457',
+                    #'Authorization': 'Token fc0870520b1d705a1718f0462aca3457',
+                    'Authorization': 'Token ' + token
                 }
 
                 files = {
@@ -56,8 +60,8 @@ def index(request):
                     files=files,
                     verify=False)
                 res = response.json()
-                print("Response-->",res)
-                
+                print("Response-->", res)
+
                 resURL = reqUrl + "/viewer/" + "zGBXUJ/" + res["identifier"]
 
                 messages.success(request, "PROCESS STATUS: SUCCESS")
